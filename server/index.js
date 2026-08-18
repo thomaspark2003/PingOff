@@ -13,8 +13,36 @@ const hash_rooms = new Map();
 app.use(cors()); //Express middleware
 app.use(express.json());
 
+app.post("/pingroom", (request, response) => {
+    const unique_code = uniqueRoom();
+    hash_rooms.set(unique_code, []);
+    response.json({ roomCode: unique_code });
+})
+
 websock_serv.on("connection", (sock) => {
     console.log("Client connection occurred")
+
+    sock.on("message", (unparsed_data) => {
+        const client_msg = JSON.parse(unparsed_data);
+
+        if (client_msg.type == "join") {
+            const unique_room = hash_rooms.get(client_msg.roomCode);
+
+            if (!unique_room) {
+                return;
+            }
+
+            unique_room.push(sock);
+            sock.roomCode = client_msg.roomCode;
+
+            if (unique_room.length == 2) {
+                for (let i=0; i<unique_room.length; i++) {
+                    const s = unique_room[i];
+                    s.send(JSON.stringify( { type: "matched" } ))
+                }
+            }
+        }
+    });
 });
 
 server.listen(5000, () => {
