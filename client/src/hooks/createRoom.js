@@ -1,5 +1,5 @@
 export async function createRoom() {
-    const response = await fetch("http://localhost:5000/pingroom", { method: "POST" });
+    const response = await fetch("https://pingoff.onrender.com/pingroom", { method: "POST" });
 
     const unparsed_data = await response.json();
 

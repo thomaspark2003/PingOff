@@ -16,7 +16,7 @@ export function useSockConn(roomCode) {
             return;
         }
 
-        const sock = new WebSocket("ws://localhost:5000");
+        const sock = new WebSocket("wss://pingoff.onrender.com");
 
         sockEnd.current = sock;
 
