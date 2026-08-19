@@ -53,15 +53,15 @@ websock_serv.on("connection", (sock) => {
 
         if (client_msg.type == "stats") {
             const room = hash_rooms.get(sock.roomCode);
-
+            console.log("STATS received. roomCode:", sock.roomCode, "room size:", room ? room.length : "NO ROOM");
             if (!room) {
                 return;
             }
-
             const opp = room.find((s) => !(s == sock));
-
+            console.log("opponent found?", !!opp);
             if (opp) {
                 opp.send(JSON.stringify({ type: "Opponent_ping", ...client_msg}))
+                console.log("sent Opponent_ping successfully");
             }
         }
 
