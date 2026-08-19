@@ -62,9 +62,9 @@ websock_serv.on("connection", (sock) => {
             const opp = room.find((s) => !(s == sock));
 
             console.log("opponent found?", !!opp);
-            
+
             if (opp) {
-                opp.send(JSON.stringify({ type: "Opponent_ping", ...client_msg}))
+                opp.send(JSON.stringify({ ...client_msg, type: "Opponent_ping" }))
                 console.log("sent Opponent_ping successfully");
             }
         }
