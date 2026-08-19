@@ -28,6 +28,7 @@ export function useSockConn(roomCode) {
 
         sock.onmessage = (event) => {
             const server_msg = JSON.parse(event.data);
+            console.log("received:", server_msg.type, server_msg);
             if (server_msg.type == "matched") {
                 setMatched(true);
                 pingInterval = setInterval(() => {
