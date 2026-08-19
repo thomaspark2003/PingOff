@@ -9,7 +9,7 @@ function App() {
   const [joinState, setJoinState] = useState("");
 
 
-  const { matched } = useSockConn(roomCode);
+  const { matched, myPing, oppPing } = useSockConn(roomCode);
 
   async function ManageRoom() {
     const code = await createRoom();
@@ -36,6 +36,13 @@ function App() {
           setJoinState(e.target.value)} placeholder="Insert Room Code"></input>
           <button type="button" onClick={ManageJoinRoom}>Join Room</button>
       </div>
+
+      {matched && (
+        <div>
+          <p>Me: {myPing.rtt ?? "-"}ms Ping, {myPing.jitter ?? "-"}ms jitter</p>
+          <p>Opponent: {oppPing.rtt ?? "-"}ms Ping, {oppPing.jitter ?? "-"}ms jitter</p>
+        </div>
+      )}
 
       {roomCode && <p>Room code: {roomCode}</p>}
       {roomCode && !matched && <p>Waiting...</p>}

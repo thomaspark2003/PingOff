@@ -42,6 +42,29 @@ websock_serv.on("connection", (sock) => {
                 }
             }
         }
+
+        if (client_msg.type == "ping") {
+            sock.send(JSON.stringify({
+                type: "reply",
+                seq: client_msg.seq,
+                clientTime: client_msg.clientTime
+            }));
+        }
+
+        if (client_msg.type == "stats") {
+            const room = hash_rooms.get(sock.roomCode);
+
+            if (!room) {
+                return;
+            }
+
+            const opp = room.find((s) => !(s == sock));
+
+            if (opp) {
+                opp.send(JSON.stringify({ type: "Opponent_ping", ...client_msg}))
+            }
+        }
+
     });
 });
 
